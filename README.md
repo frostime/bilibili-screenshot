@@ -1,3 +1,1 @@
-# rollup-userscript-template
-
-更改自 [cvzi/rollup-userscript-template](https://github.com/cvzi/rollup-userscript-template)
+在 B 站右下角添加一个按钮，点击之后，会将当前正在播放的视频进行截图，并将截图复制到剪贴板。

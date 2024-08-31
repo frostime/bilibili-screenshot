@@ -1,16 +1,13 @@
 {
+    "name": "Bilibili 复制视频截图",
     "namespace": "github.com/frostime",
-    "copyright": "2023, frostime",
+    "copyright": "(2024) frostime",
     "require": [
     ],
     "match": [
-        "https://github.com/*"
+        "*://www.bilibili.com/video/*"
     ],
     "grant": [
-        "GM_getValue",
-        "GM_setValue",
-        "GM_log",
-        "GM_addStyle",
-        "GM_xmlhttpRequest"
-    ]
+    ],
+    "icon": "https://www.google.com/s2/favicons?sz=64&domain=bilibili.com"
 }

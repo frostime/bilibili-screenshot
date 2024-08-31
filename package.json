@@ -1,7 +1,7 @@
 {
-    "name": "rollup-userscript-template",
+    "name": "bilibili-screenshot",
     "version": "0.1.0",
-    "description": "Bundle typescript, into a single userscript file with rollup",
+    "description": "快速获取Bilibili当前视频的截图并复制到剪贴板",
     "keywords": [
         "userscript",
         "greasemonkey",
