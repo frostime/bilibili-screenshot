@@ -4,7 +4,7 @@
 // @namespace   github.com/frostime
 // @match       *://www.bilibili.com/video/*
 // @icon        https://www.google.com/s2/favicons?sz=64&domain=bilibili.com
-// @version     0.2.1
+// @version     0.2.2
 // @author      frostime
 // @license     MIT
 // @grant       none
@@ -122,22 +122,36 @@
     };
     // 复制分享链接
     const copyShareLink = async (timestamp = true) => {
-        // 获取 input 元素 #check-timestamp
-        const checkTimestampInput = document.querySelector('input#check-timestamp');
-        // 如果存在且 timestamp 为 true，则设置 checked 属性
-        if (checkTimestampInput && checkTimestampInput.checked !== timestamp) {
-            checkTimestampInput.click();
-            checkTimestampInput.checked = timestamp;
-        }
-        // 获取 button 元素 #share-btn-inner 并点击
-        const shareButton = document.querySelector('button#share-btn-inner');
-        if (shareButton) {
-            shareButton.click();
+        // 1. 获取当前 URL
+        const currentUrl = new URL(window.location.href);
+        const baseUrl = currentUrl.origin + currentUrl.pathname;
+        // h1.video-title 
+        const title = document.querySelector('h1.video-title')?.textContent;
+        const copyLink = (text) => {
+            navigator.clipboard.writeText(text);
             showMessage('复制分享链接');
+        };
+        if (timestamp === false) {
+            const text = `[${title}](${baseUrl})`;
+            copyLink(text);
+            return;
+        }
+        // 获取视频时间戳 div.bpx-player-ctrl-time-label span.bpx-player-ctrl-time-current
+        const current = document.querySelector('div.bpx-player-ctrl-time-label span.bpx-player-ctrl-time-current')?.textContent;
+        if (!current) {
+            showMessage('无法找到视频时间戳');
+            return;
+        }
+        const parts = current.split(':');
+        let time = 0;
+        if (parts.length === 3) {
+            time = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
         }
         else {
-            showMessage('未找到分享按钮');
+            time = parseInt(parts[0]) * 60 + parseInt(parts[1]);
         }
+        const text = `[${title} | 空降到 ${current}](${baseUrl}?t=${time})`;
+        copyLink(text);
     };
     // 消息框显示功能
     const showMessage = (message) => {
@@ -172,13 +186,19 @@
     });
     // 创建分享链接按钮
     const shareLinkButton = createButton({
-        text: '复制分享链接',
+        text: '视频分享链接',
+        onClick: () => copyShareLink(false),
+        backgroundColor: '#FF6699'
+    });
+    const preciseJumpButton = createButton({
+        text: '精准空降链接',
         onClick: () => copyShareLink(true),
         backgroundColor: '#FF6699'
     });
     // 添加按钮到按钮容器
     buttonContainer.appendChild(screenshotButton);
     buttonContainer.appendChild(shareLinkButton);
+    buttonContainer.appendChild(preciseJumpButton);
     // 将按钮组添加到页面
     document.body.appendChild(container);
 

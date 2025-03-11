@@ -127,23 +127,43 @@ const copyScreenshot = async () => {
 
 // 复制分享链接
 const copyShareLink = async (timestamp = true) => {
-    // 获取 input 元素 #check-timestamp
-    const checkTimestampInput = document.querySelector('input#check-timestamp') as HTMLInputElement;
 
-    // 如果存在且 timestamp 为 true，则设置 checked 属性
-    if (checkTimestampInput && checkTimestampInput.checked !== timestamp) {
-        checkTimestampInput.click();
-        checkTimestampInput.checked = timestamp;
-    }
+    // 1. 获取当前 URL
+    const currentUrl = new URL(window.location.href);
+    const baseUrl = currentUrl.origin + currentUrl.pathname;
 
-    // 获取 button 元素 #share-btn-inner 并点击
-    const shareButton = document.querySelector('button#share-btn-inner') as HTMLElement;
-    if (shareButton) {
-        shareButton.click();
+    // h1.video-title 
+    const title = document.querySelector('h1.video-title')?.textContent;
+
+    const copyLink = (text: string) => {
+        navigator.clipboard.writeText(text);
         showMessage('复制分享链接');
-    } else {
-        showMessage('未找到分享按钮');
     }
+
+    if (timestamp === false) {
+        const text = `[${title}](${baseUrl})`;
+        copyLink(text);
+        return;
+    }
+
+    // 获取视频时间戳 div.bpx-player-ctrl-time-label span.bpx-player-ctrl-time-current
+    const current = document.querySelector('div.bpx-player-ctrl-time-label span.bpx-player-ctrl-time-current')?.textContent;
+    if (!current) {
+        showMessage('无法找到视频时间戳');
+        return;
+    }
+
+
+    const parts = current.split(':');
+    let time = 0;
+    if (parts.length === 3) {
+        time = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
+    } else {
+        time = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+    }
+
+    const text = `[${title} | 空降到 ${current}](${baseUrl}?t=${time})`;
+    copyLink(text);
 };
 
 // 消息框显示功能
@@ -184,7 +204,12 @@ const screenshotButton = createButton({
 
 // 创建分享链接按钮
 const shareLinkButton = createButton({
-    text: '复制分享链接',
+    text: '视频分享链接',
+    onClick: () => copyShareLink(false),
+    backgroundColor: '#FF6699'
+});
+const preciseJumpButton = createButton({
+    text: '精准空降链接',
     onClick: () => copyShareLink(true),
     backgroundColor: '#FF6699'
 });
@@ -192,6 +217,7 @@ const shareLinkButton = createButton({
 // 添加按钮到按钮容器
 buttonContainer.appendChild(screenshotButton);
 buttonContainer.appendChild(shareLinkButton);
+buttonContainer.appendChild(preciseJumpButton);
 
 // 将按钮组添加到页面
 document.body.appendChild(container);
