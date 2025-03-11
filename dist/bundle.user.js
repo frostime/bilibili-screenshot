@@ -4,7 +4,7 @@
 // @namespace   github.com/frostime
 // @match       *://www.bilibili.com/video/*
 // @icon        https://www.google.com/s2/favicons?sz=64&domain=bilibili.com
-// @version     0.2.0
+// @version     0.2.1
 // @author      frostime
 // @license     MIT
 // @grant       none
@@ -125,9 +125,9 @@
         // 获取 input 元素 #check-timestamp
         const checkTimestampInput = document.querySelector('input#check-timestamp');
         // 如果存在且 timestamp 为 true，则设置 checked 属性
-        if (timestamp === true && checkTimestampInput) {
+        if (checkTimestampInput && checkTimestampInput.checked !== timestamp) {
             checkTimestampInput.click();
-            checkTimestampInput.checked = true;
+            checkTimestampInput.checked = timestamp;
         }
         // 获取 button 元素 #share-btn-inner 并点击
         const shareButton = document.querySelector('button#share-btn-inner');

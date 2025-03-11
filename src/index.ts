@@ -131,9 +131,9 @@ const copyShareLink = async (timestamp = true) => {
     const checkTimestampInput = document.querySelector('input#check-timestamp') as HTMLInputElement;
 
     // 如果存在且 timestamp 为 true，则设置 checked 属性
-    if (timestamp === true && checkTimestampInput) {
+    if (checkTimestampInput && checkTimestampInput.checked !== timestamp) {
         checkTimestampInput.click();
-        checkTimestampInput.checked = true;
+        checkTimestampInput.checked = timestamp;
     }
 
     // 获取 button 元素 #share-btn-inner 并点击

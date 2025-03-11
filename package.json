@@ -1,6 +1,6 @@
 {
     "name": "bilibili-screenshot",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "快速获取Bilibili当前视频的截图并复制到剪贴板",
     "keywords": [
         "userscript",
