@@ -4,7 +4,7 @@
 // @namespace   github.com/frostime
 // @match       *://www.bilibili.com/video/*
 // @icon        https://www.google.com/s2/favicons?sz=64&domain=bilibili.com
-// @version     0.2.2
+// @version     0.2.3
 // @author      frostime
 // @license     MIT
 // @grant       none
@@ -126,7 +126,9 @@
         const currentUrl = new URL(window.location.href);
         const baseUrl = currentUrl.origin + currentUrl.pathname;
         // h1.video-title 
-        const title = document.querySelector('h1.video-title')?.textContent;
+        let title = document.querySelector('h1.video-title')?.textContent;
+        // 替换 title 内部的 [ ] 符号，防止 markdown 格式化错误，替换为 【 】
+        title = title?.replace(/\[([^\]]+)\]/g, '【$1】');
         const copyLink = (text) => {
             navigator.clipboard.writeText(text);
             showMessage('复制分享链接');
@@ -150,7 +152,7 @@
         else {
             time = parseInt(parts[0]) * 60 + parseInt(parts[1]);
         }
-        const text = `[${title} | 空降到 ${current}](${baseUrl}?t=${time})`;
+        const text = `[空降到 ${current}](${baseUrl}?t=${time})`;
         copyLink(text);
     };
     // 消息框显示功能

@@ -133,7 +133,10 @@ const copyShareLink = async (timestamp = true) => {
     const baseUrl = currentUrl.origin + currentUrl.pathname;
 
     // h1.video-title 
-    const title = document.querySelector('h1.video-title')?.textContent;
+    let title = document.querySelector('h1.video-title')?.textContent;
+
+    // 替换 title 内部的 [ ] 符号，防止 markdown 格式化错误，替换为 【 】
+    title = title?.replace(/\[([^\]]+)\]/g, '【$1】');
 
     const copyLink = (text: string) => {
         navigator.clipboard.writeText(text);
@@ -162,7 +165,7 @@ const copyShareLink = async (timestamp = true) => {
         time = parseInt(parts[0]) * 60 + parseInt(parts[1]);
     }
 
-    const text = `[${title} | 空降到 ${current}](${baseUrl}?t=${time})`;
+    const text = `[空降到 ${current}](${baseUrl}?t=${time})`;
     copyLink(text);
 };
 
